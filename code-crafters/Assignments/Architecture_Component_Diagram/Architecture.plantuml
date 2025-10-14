@@ -1,0 +1,151 @@
+@startuml Architecture
+title Whispers in the Dark Architecture
+
+
+
+' Global style settings for packages and components
+skinparam packageStyle rectangle
+skinparam componentStyle rectangle
+
+
+' Global arrow settings
+skinparam ArrowColor #5B9BD5
+skinparam ArrowThickness 2
+skinparam ArrowFontColor #5B9BD5
+
+' Stereotype-specific styling for packages:
+skinparam package<<UI>> {
+    BackgroundColor #E8F0FE
+    BorderColor #1a73e8
+    FontColor black
+}
+skinparam package<<Logic>> {
+    BackgroundColor #E6F4EA
+    BorderColor #34A853
+    FontColor black
+}
+skinparam package<<Script>> {
+    BackgroundColor #FFF9C4
+    BorderColor #FBC02D
+    FontColor black
+}
+skinparam package<<Data>> {
+    BackgroundColor #F5F5F5
+    BorderColor #9E9E9E
+    FontColor black
+}
+skinparam package<<CharMgmt>> {
+    BackgroundColor #EDE7F6
+    BorderColor #673AB7
+    FontColor black
+}
+skinparam package<<NavMgmt>> {
+    BackgroundColor #FFF3E0
+    BorderColor #FB8C00
+    FontColor black
+}
+
+package "Whispers in the Dark" {
+
+  ' User Interface Package 
+  package "User Interface" <<UI>> {
+    [User Interface] as UI
+    [Display Management] as Display
+    [Input Handling] as Input
+    [Screen Definitions] as Screens
+    [GUI Styles] as Styles
+
+    UI -[#666666]-> Display : Manages display of images, text, and GUI elements
+    UI -[#666666]-> Input : Handles player input (mouse, keyboard)
+    UI -[#666666]-> Screens : Defines screen layouts (character selection, navigation)
+    UI -[#666666]-> Styles : Applies fonts, colors, and styles to GUI (gui.rpy)
+
+  }
+
+  ' Game Logic Package 
+  package "Game Logic" <<Logic>> {
+    [Game Logic] as Logic
+    [Flow Control] as Flow
+    [State Management] as State
+    [Event Handling] as Events
+    [Variable Management] as Vars
+
+
+
+    Logic -[#666666]-> Flow : Controls game flow using labels and jumps (script.rpy, `Basement.rpy, `First_Floor.rpy)
+    Logic -[#666666]-> State : Manages game state (e.g., current_room, inventory, flags)
+    Logic -[#666666]-> Events : Handles game events (e.g., door attempts, character selection)
+    Logic -[#666666]-> Vars : Manages variables (game flags, character stats) (variables.rpy)
+
+  }
+
+  ' Story Script Package 
+  package "Story Script" <<Script>> {
+    [Story Script] as Script
+    [Narrative Content] as Narrative
+    [Scene Definitions] as Scenes
+    [Dialogue Handling] as Dialogue
+
+
+    Script -[#666666]-> Narrative : Contains story text, descriptions (script.rpy)
+    Script -[#666666]-> Scenes : Defines scenes, backgrounds (e.g., haunted house) (script.rpy, `images.rpy)
+    Script -[#666666]-> Dialogue : Handles character dialogue, interactions (script.rpy)
+
+  }
+
+  ' Game Data Package 
+  package "Game Data" <<Data>> {
+    [Game Data] as Data
+    [World State] as World
+    [Character Data] as CharData
+    [Inventory Management] as Inventory
+    [Flags and Variables] as Flags
+
+    Data -[#666666]-> World : Stores room data, locations (Basement.rpy, `First_Floor.rpy)
+    Data -[#666666]-> CharData : Stores character definitions, attributes (characters.rpy)
+    Data -[#666666]-> Inventory : Manages items, player possessions
+    Data -[#666666]-> Flags : Stores game flags (e.g., `wall_broken`, `found_hammer`, `try_door`) (variables.rpy)
+
+  }
+
+  ' Character Management Package 
+  package "Character Management" <<CharMgmt>> {
+    [Character Management] as CharMgr
+    [Character Definitions] as CharDefs
+    [Character Attributes] as CharAttrs
+    [Selection Logic] as CharSelect
+
+
+    CharMgr -[#666666]-> CharDefs : Defines characters (name, bio) (characters.rpy)
+    CharMgr -[#666666]-> CharAttrs : Manages character properties
+    CharMgr -[#666666]-> CharSelect : Handles character selection and confirmation (screens.rpy)
+
+  }
+
+  ' Navigation Management Package 
+  package "Navigation Management" <<NavMgmt>> {
+    [Navigation Management] as NavMgr
+    [Room Definitions] as Rooms
+    [Transition Logic] as Transitions
+    [Menu Logic] as NavMenu
+
+    NavMgr -[#666666]-> Rooms : Defines rooms, locations (e.g., `BS_Stage_1`, `BS_Private_Bedroom`) (Basement.rpy, `First_Floor.rpy)
+    NavMgr -[#666666]-> Transitions : Handles room transitions
+    NavMgr -[#666666]-> NavMenu : Manages navigation menu (screens.rpy)
+
+  }
+
+  ' Inter-package Interactions (with custom arrow colors) 
+  UI -[#1f77b4]-> Logic : User input, display updates
+  Logic -[#2ca02c]-> Script : Flow control, scene transitions
+  Logic -[#ff7f0e]-> Data : State updates, data access
+  Logic -[#9467bd]-> CharMgr : Character selection, updates
+  Logic -[#d62728]-> NavMgr : Room transitions
+  Script -[#8c564b]-> Data : Scene settings, variable setting
+  Data -[#e377c2]-> CharMgr : Provides character attributes
+  NavMgr -[#17becf]-> UI : Displays navigation options
+
+}
+
+
+@enduml
